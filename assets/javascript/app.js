@@ -6,6 +6,7 @@ let time = 15;
 let intervalId;
 let shownQ = [];
 let total = 0;
+let index = 0;
 // I wanted to use an object constructor here but I am again short on time
 // TODO: use a constructor for all these objects.
 // TODO: Alternatively merge all objects into a single object.
@@ -73,9 +74,8 @@ function shuffle(array) {
 
   return array;
 }
-
-qArray = shuffle(qArray);
-console.log(qArray);
+mixedArr = shuffle(qArray);
+console.log(mixedArr);
 
 function timer() {
   clearInterval(intervalId);
@@ -107,10 +107,13 @@ function reset () {
   intervalId;
   shownQ = [];
   total = 0;
+  index = 0;
+  shuffle(qArray);
+  console.log(qArray);
 }
 
 function start() {
-  if (total == 4) { //This was a cheap way to make the game end TODO: change this to the object array.length
+  if (total == mixedArr.length) {
     gameOver();
   }else{
   time = 15;
@@ -136,6 +139,7 @@ function start() {
 function correct(){
   right++;
   total++;
+  index++;
   stop()
   setTimeout(start, 3000)
   $('#inputBox').html("Good job your right!")
@@ -145,6 +149,7 @@ function correct(){
 function noAnswer (){
   unanswered++;
   total++;
+  index++;
   stop()
   setTimeout(start, 3000)
   $('#inputBox').html('The correct answer was: ' + question.answer);
@@ -154,6 +159,7 @@ function noAnswer (){
 function wrongOr (){
   wrong++;
   total++;
+  index++;
   stop();
   setTimeout(start, 3000)
   $('#inputBox').html('The correct answer was: ' + question.answer)
@@ -167,15 +173,21 @@ function stop(){
 
 // Last piece is to make sure the questions dont repeat TODO: use the shuffle function instead/
 function qGen(){
-  for (var i = 0; i < qArray.length; i++) {
-  if (question !== shownQ[i]) {
-    question = qArray[Math.floor(Math.random() * qArray.length)];
-    shownQ.push(question);
-    return question;
-    }
-    else {
-    }
-  }
+  // for (var i = 0; i < qArray.length; i++)
+  question = mixedArr[index];
+  // let i = qArray.length
+  // while (i--){
+  // if (qArray[i] === shownQ[i]) {
+  //   qArray.splice(qArray[i], 1);
+  //   console.log(qArray);
+  //   qGen();
+  //   }
+  //   else {
+  //     question = qArray[Math.floor(Math.random() * qArray.length)];
+  //     shownQ.push(question);
+  //     return question;
+  //   }
+  // }
 }
 
 function questionFill(x) {
